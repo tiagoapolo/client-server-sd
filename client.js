@@ -9,7 +9,7 @@ stdin.setEncoding( 'utf8' );
 
 
 
-client.connect(8124, '127.0.0.1', function() {
+client.connect(8081, '127.0.0.1', function() {
 	console.log('Connected');
 
 	// client.write(JSON.stringify({ id: process.argv[2]}));
@@ -31,7 +31,7 @@ client.connect(8124, '127.0.0.1', function() {
 			client.write(JSON.stringify({id: process.argv[2], data: process.argv[3], balance: process.argv[4], remove: true, role: 'user'}))
 		
 		} else {
-			
+
 			client.write(JSON.stringify({id: process.argv[2], data: process.argv[3], balance: process.argv[4], role: 'user'}))
 		}
 
