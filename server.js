@@ -71,29 +71,49 @@ const server = net.createServer((c) => {
     const id = dados['id'].replace(/(\r\n|\n|\r)/gm,"")
     // let connection = dados['connection'] ? dados['connection'] : false
     if(db[id] && db[id].role === "admin") {
-      
-      db[parseInt(dados.data).toString()] = {
-        data: "",
-        balance: parseInt(dados.balance),
-        role: dados.role
+
+      if(dados && dados.remove === true){
+
+        delete db[parseInt(dados.data).toString()]
+
+          
+        deleteInDB(parseInt(dados.data))
+        .then(() =>{
+          c.write("Deleted")
+          c.end()
+        })
+        .catch(err => {
+          c.write(err)
+          c.end()
+        })
+
+      } else {
+
+        db[parseInt(dados.data).toString()] = {
+          data: "",
+          balance: parseInt(dados.balance),
+          role: dados.role
+        }
+        
+        console.log('BASE: ', db)
+  
+        saveInDB(parseInt(dados.data), {
+          data: "",
+          balance: parseInt(dados.balance),
+          role: dados.role
+        })
+        .then(() =>{
+          c.write("Added")
+          c.end()
+        })
+        .catch(err => {
+          c.write(err)
+          c.end()
+        })
+
       }
       
 
-      console.log('BASE: ', db)
-
-      saveInDB(parseInt(dados.data), {
-        data: "",
-        balance: parseInt(dados.balance),
-        role: dados.role
-      })
-      .then(() =>{
-        c.write("Added")
-        c.end()
-      })
-      .catch(err => {
-        c.write(err)
-        c.end()
-      })
 
       
 
@@ -188,6 +208,41 @@ function saveInDB(hash, info){
 
   })
 }
+
+
+function deleteInDB(hash){
+
+  return new Promise(resolve => {
+  fs.readFile('db.json', 'utf8', (err, data)=>{
+      if (err){
+          console.log(err);
+      } else {
+
+      try {
+
+        obj = JSON.parse(data); //now it an object
+
+        delete obj[hash] //add some data
+
+        json = JSON.stringify(obj); //convert it back to json
+
+        fs.writeFile('db.json', json, 'utf8',() => {
+          resolve()
+          
+        }); // write it back       
+
+      } catch (err) {
+        console.log('err: ',err)
+        return
+      }
+      
+    }
+  });
+
+  })
+}
+
+
 
 function readDB() {
 

@@ -26,9 +26,16 @@ client.connect(8124, '127.0.0.1', function() {
 		if(!process.argv[4]){
 			console.log('Parametro Balance')
 			process.exit()
+		} else if (process.argv[4] === "remove") {
+
+			client.write(JSON.stringify({id: process.argv[2], data: process.argv[3], balance: process.argv[4], remove: true, role: 'user'}))
+		
+		} else {
+			
+			client.write(JSON.stringify({id: process.argv[2], data: process.argv[3], balance: process.argv[4], role: 'user'}))
 		}
 
-		client.write(JSON.stringify({id: process.argv[2], data: process.argv[3], balance: process.argv[4], role: 'user'}))
+		
 									
 			// write the key to stdout all normal like
 			// process.stdout.write( key );
