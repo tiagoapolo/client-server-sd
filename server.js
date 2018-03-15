@@ -136,7 +136,7 @@ const server = net.createServer((c) => {
       }
 
     } else {
-      c.write('No user')
+      c.write('no user')
       c.end()
       return
     }

@@ -35,13 +35,14 @@ client.connect(8124, '127.0.0.1', function() {
 		
 
 	} else {
+
 		stdin.on( 'data', function( key ){
 			// ctrl-c ( end of text )
 			if ( key === '\u0003' ) {
 				client.end()
 				process.exit();
 			}
-			process.stdout.write( key )
+			// process.stdout.write( key )
 			client.write(JSON.stringify({id: process.argv[2], data: key, role: 'user'}))
 			// write the key to stdout all normal like
 			// process.stdout.write( key );
@@ -53,7 +54,12 @@ client.connect(8124, '127.0.0.1', function() {
 
 client.on('data', function(data) {
 	console.log('Received: ' + data.toString());
-	// client.destroy(); // kill client after server's response
+	if(data.toString() === "no user") {
+		console.log('Access denied')
+		client.end()
+		process.exit()
+	}
+
 });
 
 client.on('close', function() {
