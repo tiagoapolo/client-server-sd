@@ -1,0 +1,11 @@
+{
+  "name": "serversist",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "tiagoapolo",
+  "license": "MIT",
+  "dependencies": {
+    
+  },
+  "scripts": { "start": "node server.js"}
+}
